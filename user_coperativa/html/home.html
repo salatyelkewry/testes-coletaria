@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rotas em Andamento - ColetarAI</title>
+    <link rel="icon" href="../img/logo 1.png">
+    <!-- Configuração de Fonte: Usando Inter, uma fonte sans-serif limpa e moderna, semelhante ao design -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Variáveis de Cores e Espaçamento (Emulando a escala do Tailwind) */
+        :root {
+            --color-primary-start: #00FE5B; /* Verde Neon */
+            --color-primary-end: #006F4A;   /* Verde Escuro/Aqua */
+            --color-gray-50: #F9FAFB;
+            --color-gray-800: #1F2937;
+            --color-shadow: rgba(0, 0, 0, 0.15);
+            --spacing-1: 0.25rem;  /* 4px */
+            --spacing-2: 0.5rem;   /* 8px */
+            --spacing-3: 0.75rem;  /* 12px */
+            --spacing-4: 1rem;     /* 16px */
+            --spacing-5: 1.25rem;  /* 20px */
+            --spacing-6: 1.5rem;   /* 24px */
+            --spacing-8: 2rem;     /* 32px */
+            --spacing-10: 2.5rem;  /* 40px */
+            --rounded-lg: 0.5rem;
+            --rounded-xl: 0.75rem;
+            --rounded-full: 9999px;
+        }
+
+        /* Reset Básico e Tipografia */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: white;
+            color: var(--color-gray-800);
+            min-height: 100vh;
+        }
+
+        /* Layout Principal: Simula um container de app móvel centralizado */
+        .app-container {
+            max-width: 400px; /* Largura máxima típica de celular */
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background: white;
+        }
+
+        @media (max-width: 480px) {
+            .app-container {
+                max-width: 100%;
+                margin: 0;
+            }
+
+            .footer-nav {
+                max-width: 100%;
+            }
+        }
+
+        /* Conteúdo principal com padding e flex-grow para ocupar espaço */
+        .main-content {
+            padding: var(--spacing-4);
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-5); /* Espaçamento entre seções */
+        }
+
+        /* Componentes de Cabeçalho (Header) */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--spacing-4) var(--spacing-4) var(--spacing-2) var(--spacing-4);
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            font-size: var(--spacing-4);
+            font-weight: 700;
+        }
+
+        .header-location {
+            display: flex;
+            align-items: center;
+            font-size: var(--spacing-3);
+            font-weight: 600;
+            color: #374151; /* Cor de texto discreta */
+        }
+        
+        /* Ícone de Ponto de Localização (Pin) */
+        .icon-pin {
+            width: 1rem;
+            height: 1rem;
+            margin-left: var(--spacing-1);
+            fill: #EF4444; /* Vermelho do Pin */
+        }
+
+        /* Título Principal (H1) */
+        .title {
+            font-size: 1.75rem; /* ~28px */
+            font-weight: 800;
+            margin: var(--spacing-2) 0;
+            padding: 0 var(--spacing-4); /* Alinha com o padding lateral do main-content */
+        }
+
+        /* Área do Mapa (Placeholder) */
+        .map-section {
+            padding: 0 var(--spacing-4);
+        }
+        
+        .map-placeholder {
+            width: 100%;
+            height: 200px; /* Altura fixa para simular o mapa */
+            border-radius: var(--rounded-xl);
+            box-shadow: 0 4px 6px -1px var(--color-shadow), 0 2px 4px -2px var(--color-shadow);
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: url('../img/maparotas.png');
+            background-size: cover;
+            background-position: center;
+            border: 1px solid #D1D5DB;
+        }
+
+        /* Seção de Botões Duplos */
+        .button-group-row {
+            display: flex;
+            gap: var(--spacing-3);
+            padding: 0 var(--spacing-4);
+        }
+
+        /* Estilo base para todos os botões principais */
+        .action-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--spacing-4) var(--spacing-5);
+            font-weight: 700;
+            text-transform: uppercase;
+            color: white;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            border-radius: var(--rounded-lg);
+            background: linear-gradient(90deg, var(--color-primary-start), var(--color-primary-end));
+            box-shadow: 0 4px 6px -1px var(--color-shadow), 0 2px 4px -2px var(--color-shadow);
+            transition: transform 0.1s, box-shadow 0.1s;
+        }
+
+        .action-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 12px -1px var(--color-shadow), 0 4px 6px -2px var(--color-shadow);
+        }
+
+        .action-button:active {
+            transform: translateY(1px);
+            box-shadow: none;
+        }
+
+        .dual-button {
+            flex-grow: 1;
+            font-size: 0.75rem; /* Texto menor para caber */
+            padding: var(--spacing-4) var(--spacing-2);
+            height: 50px; /* Altura fixa para alinhamento */
+        }
+
+        /* Seção de Botões em Lista (Largura Total) */
+        .button-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-4);
+            padding: 0 var(--spacing-4);
+        }
+
+        .list-button {
+            justify-content: flex-start; /* Alinhamento à esquerda */
+            padding: var(--spacing-3) var(--spacing-4);
+            font-size: var(--spacing-4);
+        }
+
+        .list-button-content {
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        .list-button-icon {
+            margin-right: var(--spacing-4);
+            width: 32px; /* Largura do ícone */
+            height: 32px; /* Altura do ícone */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .list-button-text {
+            font-size: var(--spacing-4);
+            flex-grow: 1;
+            text-align: left;
+        }
+        
+        /* Cores dos Ícones e Símbolos */
+        .icon-truck svg, .icon-bar-chart svg, .icon-alert svg {
+            fill: white;
+        }
+        
+        .icon-alert {
+            /* Ajuste para o triângulo de alerta, que parece mais vermelho */
+            background-color: #EF4444; 
+            border-radius: var(--rounded-lg);
+        }
+        .icon-alert svg {
+            fill: white;
+            stroke: white;
+            stroke-width: 1;
+        }
+
+        /* Footer de Navegação */
+        .footer-nav {
+            position: sticky;
+            bottom: 0;
+            width: 100%;
+            max-width: 400px; /* Mantém a largura do container */
+            background-color: #E3EDE6; /* Fundo na cor especificada */
+            display: flex;
+            justify-content: space-around;
+            padding: var(--spacing-3) 0;
+            border-radius: var(--rounded-xl) var(--rounded-xl) 0 0;
+            box-shadow: 0 -4px 6px -1px var(--color-shadow), 0 -2px 4px -2px var(--color-shadow), 4px 0 6px -1px var(--color-shadow), -4px 0 6px -1px var(--color-shadow);
+            z-index: 10;
+        }
+
+        .nav-item {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: var(--spacing-2);
+            cursor: pointer;
+            transition: transform 0.1s, box-shadow 0.1s;
+        }
+
+        .nav-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 12px -1px var(--color-shadow), 0 4px 6px -2px var(--color-shadow);
+        }
+
+        .nav-item:active {
+            transform: translateY(1px);
+            box-shadow: none;
+        }
+
+        .nav-icon {
+            width: 30px;
+            height: 30px;
+            color: var(--color-gray-800); /* Cor padrão para ícones inativos */
+        }
+
+        /* Ícone Ativo (Casa) */
+        .nav-item.active .nav-icon {
+            background-color: var(--color-primary-start);
+            border-radius: var(--rounded-full);
+            padding: var(--spacing-2);
+            width: 46px; /* Ajuste para o padding extra */
+            height: 46px; /* Ajuste para o padding extra */
+            position: relative;
+            top: -10px; /* Deslocamento para cima, como na imagem */
+            box-shadow: 0 4px 10px rgba(0, 255, 153, 0.5);
+            color: var(--color-gray-800); /* Cor do ícone dentro do círculo */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .nav-item.active .nav-icon img {
+            width: 22px;
+            height: 22px;
+        }
+        .nav-icon img {
+             width: 2rem;
+             height: 2rem;
+        }
+
+        @media (max-width: 480px) {
+            .nav-icon img {
+                width: 1.5rem;
+                height: 1.5rem;
+            }
+        }
+
+        /* Ícone de Logo (Placeholder) */
+        .logo-placeholder {
+            width: 12px;
+            height: auto;
+            background-color: white;
+            border-radius: var(--rounded-sm);
+            margin-right: var(--spacing-2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-primary-end);
+            font-size: 14px;
+            font-weight: 800;
+            padding: var(--spacing-1);
+        }
+
+        /* Ícones em SVG Inline para fidelidade */
+
+        /* Ícone de Pin de Localização */
+        .svg-pin {
+            fill: #EF4444;
+            width: 18px;
+            height: 18px;
+            margin-right: 2px;
+        }
+
+        /* Ícone de Caminhão */
+        .svg-truck {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* Ícone de Gráfico de Barras (Dashboard) */
+        .svg-bar-chart {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* Ícone de Alerta (Triângulo) */
+            .svg-alert {
+                width: 24px;
+                height: 24px;
+            fill: white;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        
+        <header class="header">
+            <!-- Logo e Título (ColetarAI) -->
+            <div class="header-logo">
+                <!-- Ícone da Logo (simulando o envelope verde) -->
+                <div class="logo-placeholder">
+                    <img src="../img/logo 1.png" alt="" style="width: 20px; height: auto;">
+
+                </div>
+                <!-- Texto da Marca -->
+                ColetarAI
+            </div>
+            
+            <!-- Localização (Jijoca de Jericoacoara) -->
+            <div class="header-location">
+                Jijoca de Jericoacoara
+                <!-- Ícone de Pin -->
+                <svg class="svg-pin" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M12 2C8.686 2 6 4.686 6 8c0 4 6 14 6 14s6-10 6-14c0-3.314-2.686-6-6-6zm0 9c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z"/>
+                </svg>
+            </div>
+        </header>
+
+        <main class="main-content">
+            
+            <!-- Título da Seção -->
+            <h1 class="title">Rotas em andamento</h1>
+            
+            <!-- Seção do Mapa (Placeholder da Imagem) -->
+            <section class="map-section">
+                <!-- A imagem de mapa na verdade é um placeholder estilizado -->
+                <div class="map-placeholder" role="img" aria-label="Mapa com rotas em andamento e marcadores de localização">
+                    <img src="../img/maparotas.png" alt="">
+                </div>
+            </section>
+
+            <!-- Seção de Botões Duplos -->
+            <section class="button-group-row">
+                <a href="pequenogerador.html" class="action-button dual-button">PEQUENO GERADOR</a>
+                <a href="grandegerador.html" class="action-button dual-button">GRANDE GERADOR</a>
+            </section>
+
+            <!-- Seção de Botões de Lista -->
+            <section class="button-list">
+                
+                <!-- Botão 1: PAINEL DA FROTA -->
+                <a href="painefrota.html" class="action-button list-button">
+                    <div class="list-button-content">
+                        <!-- Ícone de Caminhão (Frota) -->
+                        <div class="list-button-icon icon-truck">
+                             <img src="../img/caminhaopreto.png" alt=""><path d="M18.5 7.5h-1c-.827 0-1.5.673-1.5 1.5v3h-12c-1.103 0-2 .897-2 2v2h2v1c0 1.103.897 2 2 2h9c1.103 0 2-.897 2-2v-1h2v-2h1c1.103 0 2-.897 2-2V9c0-1.103-.897-2-2-2zM4 15c0-.551.449-1 1-1h11c.551 0 1 .449 1 1v1c0 .551-.449 1-1 1H5c-.551 0-1-.449-1-1v-1zm14 0c0-.551.449-1 1-1h1c.551 0 1 .449 1 1v1c0 .551-.449 1-1 1h-1c-.551 0-1-.449-1-1v-1z"/></svg>
+                        </div>
+                        <span class="list-button-text">PAINEL DA FROTA</span>
+                    </div>
+                </a>
+
+                <!-- Botão 2: DASHBOARD -->
+                <a href="dashboard.html" class="action-button list-button">
+                    <div class="list-button-content">
+                        <!-- Ícone de Gráfico de Barras -->
+                        <div class="list-button-icon icon-bar-chart">
+                            <img src="../img/icon.dashb.png" alt=""><path d="M12 20c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8zm0-14c-3.309 0-6 2.691-6 6s2.691 6 6 6 6-2.691 6-6-2.691-6-6-6zm-1 5h2v6h-2zM7 11h2v6H7zm8 0h2v6h-2z"/></svg>
+                        </div>
+                        <span class="list-button-text">DASHBOARD</span>
+                    </div>
+                </a>
+
+                <!-- Botão 3: PONTOS DE ALERTA -->
+                <a href="pontosdealerta.html" class="action-button list-button">
+                    <div class="list-button-content">
+                        <!-- Ícone de Alerta (Triângulo Vermelho) -->
+                    <div class="list-button-icon icon-truck">
+                     <img src="../img/icon.alerta.png" alt="" width="22" height="22" style="display:block; object-fit:contain;">
+                    </div>
+                        <span class="list-button-text">PONTOS DE ALERTA</span>
+                    </div>
+                </a>
+            </section>
+
+        </main>
+
+        <!-- Footer de Navegação -->
+        <footer class="footer-nav">
+            
+            <!-- Ícone Casa (Ativo) -->
+            <a href="home.html" class="nav-item active" aria-label="Página Inicial">
+                <div class="nav-icon">
+                    <img src="../img/icon.house.png" alt="Home">
+                </div>
+            </a>
+
+            <!-- Ícone Sacola/Mochila (Inativo) -->
+            <a href="lojadepontos.html" class="nav-item" aria-label="Pedidos ou Sacola">
+                <div class="nav-icon">
+                    <img src="../img/icon.compras.png" alt="Compras">
+                </div>
+            </a>
+
+            <!-- Ícone Troféu/Estrela (Inativo) -->
+            <a href="ranking.html" class="nav-item" aria-label="Recompensas ou Perfil">
+                <div class="nav-icon">
+                    <img src="../img/icon.ranking.png" alt="Ranking">
+                </div>
+            </a>
+        </footer>
+
+    </div>
+
+</body>
+</html>

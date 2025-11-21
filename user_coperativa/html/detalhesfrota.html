@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes da Coleta</title>
+    <link rel="icon" href="../img/logo 1.png">
+    <!-- Carrega o Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Configuração de fontes e cores do Tailwind (opcional, mas bom para Inter) -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Cor de fundo que simula o ambiente do app, ligeiramente escuro */
+            background-color: #f3f4f6;
+        }
+        .custom-card {
+            position: relative;
+            box-shadow: 4px -4px 8px rgba(128, 128, 128, 0.3);
+        }
+        .custom-card::before {
+            content: '';
+            position: absolute;
+            inset: 0; /* Preenche tudo */
+            padding-left: 4px; /* Espessura da “borda” */
+            border-radius: inherit; /* usa o mesmo arredondamento do card */
+            background: linear-gradient(to bottom, #F93B3B, #933B3B);
+            -webkit-mask:
+                linear-gradient(#fff 0 0) content-box,
+                linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+                    mask-composite: exclude;
+            pointer-events: none;
+        }
+
+        
+    </style>
+</head>
+<body class="h-screen flex flex-col items-center pt-6 pb-6">
+
+    <!-- Container Central que simula a tela do celular (max-width de um telefone) -->
+    <div class="w-full max-w-sm mx-auto p-4 md:p-6 bg-white shadow-xl rounded-3xl">
+
+        <!-- Header - DETALHES -->
+        <header class="flex items-center justify-between mb-8">
+            <!-- Ícone de Voltar (seta) -->
+            <a href="painefrota.html" class="p-2 -ml-2 text-gray-800">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                </svg>
+            </a>
+            <h1 class="text-xl font-semibold uppercase tracking-wider flex-grow text-center pr-10">
+                DETALHES
+            </h1>
+            <!-- Espaço em branco para centralizar o título (simula o espaço da seta) -->
+            <div class="w-6"></div>
+        </header>
+
+        <!-- Cartão Principal de Conteúdo -->
+        <!-- O contorno vermelho/rosa é simulado com ring-4 e ring-opacity -->
+        <div class="bg-white rounded-3xl p-5 shadow-lg custom-card">
+            
+            <!-- Linha 1: Ícones Galão e Lixeira -->
+            <div class="flex items-center space-x-1 mb-4">
+                <!-- Galão de Gasolina (Vermelho) -->
+                <svg class="w-8 h-8 text-red-600" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M18 20H6c-1.1 0-2-.9-2-2v-3c0-.55.45-1 1-1h14c.55 0 1 .45 1 1v3c0 1.1-.9 2-2 2zM15 9V4c0-1.1-.9-2-2-2h-2c-1.1 0-2 .9-2 2v5h6zm-2-7h2v5h-2V2z"/>
+                </svg>
+                <!-- Lixeira (Verde) -->
+                <svg class="w-8 h-8 text-transparent bg-clip-text bg-gradient-to-r from-[#00FE5B] to-[#006F4A]" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+                </svg>
+            </div>
+
+            <!-- Linha 2: Informações do Motorista -->
+            <div class="text-sm text-gray-700 mb-6 font-bold">
+                <p>MOTORISTA: Joãozinho</p>
+                <p>PLACA: SBT1234</p>
+            </div>
+
+            <!-- Linha 3: TOTAL DE LIXO COLETADO -->
+            <p class="uppercase text-sm font-bold text-gray-500 mb-2">
+                TOTAL DE LIXO COLETADO:
+            </p>
+
+            <!-- Linha 4: Valor do Lixo Coletado (412 kg) em destaque verde -->
+            <div class="inline-block bg-white border border-[#00FE5B] rounded-lg p-2 mb-8">
+                <span class="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#00FE5B] to-[#006F4A]">
+                    412
+                </span>
+                <span class="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#00FE5B] to-[#006F4A] ml-1">
+                    kg
+                </span>
+            </div>
+
+            <!-- Linha 5: Gasolina Gasta e Teto de Gastos (2 colunas) -->
+            <div class="flex justify-between space-x-4">
+                
+                <!-- Card Gasolina Gasta (Esquerda) -->
+                <div class="flex-1 text-center">
+                    <p class="uppercase text-xs font-bold text-gray-500 mb-2 whitespace-nowrap">
+                        GASOLINA GASTA
+                    </p>
+                    <!-- O valor "21 l" tem um fundo sutilmente avermelhado com borda -->
+                    <div class="bg-red-50 ring-2 ring-red-400 rounded-xl p-3">
+                        <span class="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#F93B3B] to-[#933B3B]">
+                            21
+                        </span>
+                        <span class="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#F93B3B] to-[#933B3B] ml-1">
+                            l
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Card Teto de Gastos (Direita) -->
+                <div class="flex-1 text-center">
+                    <p class="uppercase text-xs font-bold text-gray-500 mb-2 whitespace-nowrap">
+                        TETO DE GASTOS DE GASOLINA
+                    </p>
+                    <!-- O valor "400 l" tem um fundo sutilmente avermelhado com borda -->
+                    <div class="bg-red-50 ring-2 ring-red-400 rounded-xl p-3">
+                        <span class="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#F93B3B] to-[#933B3B]">
+                            400
+                        </span>
+                        <span class="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#F93B3B] to-[#933B3B] ml-1">
+                            l
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <!-- Fim das 2 colunas -->
+        </div>
+        <!-- Fim do Cartão Principal -->
+
+        <!-- Botão de Ação (EDITAR PONTOS DE COLETA) -->
+        <!-- O texto na imagem parece ser "EDIATR", mas presumimos "EDITAR" -->
+        <button onclick="window.location.href='ediçãopontos.html'" class="mt-8 w-full flex items-center justify-center bg-gradient-to-r from-[#00FE5B] to-[#006F4A] hover:bg-gradient-to-r hover:from-[#00FE5B] hover:to-[#006F4A] text-white font-bold py-4 px-4 rounded-xl shadow-lg transition duration-150 ease-in-out">
+            <!-- Ícone de Lápis/Edição -->
+            <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+            </svg>
+            EDITAR PONTOS DE COLETA
+        </button>
+
+    </div>
+
+</body>
+</html>

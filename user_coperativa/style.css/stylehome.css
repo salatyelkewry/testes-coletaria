@@ -1,0 +1,269 @@
+/* Reset básico e box-sizing */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0; 
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif; /* Supondo fonte similar */
+  background-color: #fff;
+  color: #000;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.container {
+  max-width: 414px; /* largura aproximada da tela do print */
+  margin: 0 auto;
+  padding: 16px 16px 80px; /* topo e laterais, bottom maior para nav inferior */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Header com logo e localização, alinhado horizontalmente */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/* Placeholder para logo */
+.logo-placeholder {
+  width: 80px;
+  height: 36px;
+  background: #ddd; /* cor neutra pra reservar espaço */
+  border-radius: 4px;
+}
+
+/* Texto de localização */
+.location {
+  font-size: 13px;
+  font-weight: 600;
+  color: #000;
+}
+
+/* Título principal */
+.title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+/* Container do mapa */
+.map-container {
+  width: 100%;
+  height: 190px; /* Correspondente ao placeholder do mapa */
+  margin-bottom: 20px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* Imagem de mapa */
+.map-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+/* Botões pequeno e grande gerador lado a lado */
+.generator-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+/* Botões básicos */
+.btn {
+  border: none;
+  cursor: pointer;
+  color: #fff;
+  font-weight: 700;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  transition: background-color 0.3s ease;
+}
+
+/* Botões pequeno e grande gerador específicos */
+.small-btn {
+  flex: 1;
+  height: 40px;
+  background: linear-gradient(90deg, #00CC4D 0%, #009C38 100%);
+  font-size: 14px;
+}
+
+.small-btn:hover {
+  background: linear-gradient(90deg, #009C38 0%, #007027 100%);
+}
+
+/* Botões principais da lista com ícone */
+.main-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+/* Botões principais */
+.main-btn {
+  height: 52px;
+  padding-left: 16px;
+  padding-right: 24px;
+  font-size: 15px;
+  gap: 8px;
+  justify-content: flex-start;
+  background: linear-gradient(90deg, #00CC4D 0%, #009C38 100%);
+  border-radius: 12px;
+}
+
+/* Ícones */
+.icon {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  background-color: white;
+  border-radius: 50%;
+  flex-shrink: 0;
+  position: relative;
+}
+
+/* Ícones personalizados simulados com formas simples */
+
+/* Caminhão (PAINEL DA FROTA) */
+.icon-truck::before {
+  content: "";
+  position: absolute;
+  top: 6px; left: 6px;
+  width: 12px; height: 12px;
+  background: black;
+  border-radius: 2px;
+}
+
+/* Gráfico (DASHBOARD) */
+.icon-chart::before {
+  content: "";
+  position: absolute;
+  left: 6px; bottom: 6px;
+  width: 4px; height: 12px;
+  background: black;
+  box-shadow: 6px 0 black, 12px -4px black;
+}
+
+/* Alerta (PONTOS DE ALERTA) */
+.icon-alert {
+  background: white;
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  border-radius: 0;
+}
+.icon-alert::before {
+  content: "!";
+  color: red;
+  font-weight: 900;
+  position: absolute;
+  top: 4px;
+  left: 9px;
+  font-size: 16px;
+  line-height: 16px;
+}
+
+/* Barra inferior de navegação */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 414px;
+  background: #fff;
+  border-top: 1px solid #ccc;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 60px;
+  padding: 0 16px;
+  box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
+}
+
+/* Botões da barra inferior */
+.nav-btn {
+  background: transparent;
+  padding: 0;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  transition: background-color 0.3s ease;
+}
+
+/* Ícones home, bag, star no nav abaixo representados com círculos e formas simples */
+/* Ícone casa */
+.icon-home {
+  width: 24px;
+  height: 24px;
+  background: #ccc;
+  clip-path: polygon(50% 0%, 100% 40%, 80% 40%, 80% 80%, 20% 80%, 20% 40%, 0% 40%);
+  border-radius: 2px;
+}
+
+/* Ícone sacola */
+.icon-bag {
+  width: 20px;
+  height: 24px;
+  background: #ccc;
+  border-radius: 4px;
+  position: relative;
+}
+.icon-bag::before {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 12px;
+  height: 6px;
+  background: #999;
+  border-radius: 2px;
+}
+
+/* Ícone estrela */
+.icon-star {
+  width: 24px;
+  height: 24px;
+  background: #ccc;
+  clip-path: polygon(
+    50% 0%,
+    61% 35%,
+    98% 35%,
+    68% 57%,
+    79% 91%,
+    50% 70%,
+    21% 91%,
+    32% 57%,
+    2% 35%,
+    39% 35%
+  );
+  border-radius: 2px;
+}
+
+/* Botão ativo da barra inferior com destaque verde e sombra */
+.nav-btn.active {
+  background: #00cc4d;
+  box-shadow:
+    0 0 8px #00cc4d,
+    inset 0 0 8px #00cc4d;
+}
+
+/* Espaço extra abaixo do conteúdo para não colidir com o nav fixo */
+.spacer {
+  flex-grow: 1;
+}

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Percentual de Coleta</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" href="../img/logo 1.png">
+
+    <!-- Carregando Chart.js para Gráficos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+    <style>
+        /* Definindo as cores específicas para o Tailwind */
+        /* Estas classes serão usadas na legenda e no gráfico */
+        .color-plastic { background-color: #00ffff; } /* Ciano */
+        .color-paper { background-color: #ff0000; } /* Vermelho */
+        .color-pile { background-color: #9333ea; } /* Roxo (Fucsia/Violeta) */
+        .color-battery { background-color: #0000ff; } /* Azul */
+        .color-cardboard { background-color: #16a34a; } /* Verde Escuro/Medio */
+        .color-glass { background-color: #facc15; } /* Amarelo */
+
+        /* Estilos do Donut Chart (Gráfico de Rosca) */
+        .donut-chart-container {
+            width: 250px; /* Tamanho do gráfico */
+            height: 250px;
+            border-radius: 50%;
+            position: relative;
+            background: conic-gradient(
+                /* Os ângulos são calculados pelo total acumulado */
+                /* Vidro (25%): 0% a 25% */
+                #facc15 0%, #facc15 25%,
+                /* Papelão (20%): 25% a 45% */
+                #16a34a 25%, #16a34a 45%,
+                /* Bateria (8%): 45% a 53% */
+                #0000ff 45%, #0000ff 53%,
+                /* Pilha (5%): 53% a 58% */
+                #9333ea 53%, #9333ea 58%,
+                /* Papel (30%): 58% a 88% */
+                #ff0000 58%, #ff0000 88%,
+                /* Plástico (12%): 88% a 100% */
+                #00ffff 88%, #00ffff 100%
+            );
+        }
+
+        /* O "buraco" do donut chart */
+        .donut-chart-container::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 60%; /* Tamanho do buraco (ajustável) */
+            height: 60%;
+            background: white; /* Cor de fundo do buraco (deve ser a mesma do background da tela) */
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Posicionamento dos Textos de Porcentagem */
+        /* São posicionados absolutamente sobre o gráfico */
+        .chart-percentage {
+            position: absolute;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        /* Porcentagens (aproximadas, baseadas no visual da imagem) */
+        /* Ajustei a margem superior para o card principal para simular o espaçamento do app */
+
+        /* Sombra gradiente em um lado */
+        .card-shadow {
+            position: relative;
+        }
+
+        .card-shadow::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: -10px;
+            bottom: 0;
+            width: 10px;
+            background: linear-gradient(to right, #00FE5B, #006F4A);
+            border-radius: 0 8px 8px 0;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+
+    <div class="max-w-md mx-auto pt-6 px-4">
+        
+        <header class="flex items-center justify-center relative mb-6">
+            <button type="button" onclick="location.href='dashboard.html'" aria-label="Voltar para a página inicial" class="absolute left-0 focus:outline-none p-1 rounded hover:text-green-600 transition-colors duration-150 ease-in-out focus:ring-2 focus:ring-green-200">
+                <svg class="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                </svg>
+            </button>
+            <h1 class="text-xl font-bold tracking-widest uppercase text-gray-800">PERCENTUAL</h1>
+        </header>
+        
+        <div class="card-shadow bg-white p-4 rounded-lg shadow-lg border-2 border-green-500/50" style="border-color: #34d399; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);">
+            
+            <h2 class="text-lg font-medium mb-4">Percentual de Coleta</h2>
+            
+            <div class="flex justify-center relative mb-10">
+                <canvas id="donutChart" width="250" height="250"></canvas>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-x-6 gap-y-2 mt-4 text-sm font-medium">
+                
+                <div class="flex flex-col space-y-2">
+                    <span class="text-gray-700 font-bold">PLÁSTICO</span>
+                    <span class="text-gray-700 font-bold">PAPEL</span>
+                    <span class="text-gray-700 font-bold">PILHA</span>
+                    <span class="text-gray-700 font-bold">BATERIA</span>
+                    <span class="text-gray-700 font-bold">PAPELÃO</span>
+                    <span class="text-gray-700 font-bold">VIDRO</span>
+                </div>
+                
+                <div class="flex flex-col space-y-2">
+                    <div class="h-4 w-full color-plastic rounded"></div>
+                    <div class="h-4 w-full color-paper rounded"></div>
+                    <div class="h-4 w-full color-pile rounded"></div>
+                    <div class="h-4 w-full color-battery rounded"></div>
+                    <div class="h-4 w-full color-cardboard rounded"></div>
+                    <div class="h-4 w-full color-glass rounded"></div>
+                </div>
+            </div>
+            
+        </div>
+        
+    </div>
+</div>
+
+    <!-- Script para inicializar o Donut Chart interativo usando Chart.js -->
+    <script>
+        // Dados do gráfico (exemplo com os mesmos percentuais visuais usados no CSS)
+        const labels = ['Plástico', 'Papel', 'Pilha', 'Bateria', 'Papelão', 'Vidro'];
+        const data = [12, 30, 5, 8, 20, 25];
+        const colors = ['#00ffff', '#ff0000', '#9333ea', '#0000ff', '#16a34a', '#facc15'];
+
+        const ctx = document.getElementById('donutChart').getContext('2d');
+
+        // Plugin para desenhar texto central que muda conforme segmento ativo
+        const centerTextPlugin = {
+            id: 'centerTextPlugin',
+            afterDraw(chart, args, options) {
+                const {ctx, chartArea: {width, height}} = chart;
+                ctx.save();
+
+                const active = chart.getActiveElements();
+                let text = '';
+                if (active && active.length) {
+                    const idx = active[0].index;
+                    const value = chart.data.datasets[0].data[idx];
+                    const total = chart.data.datasets[0].data.reduce((a,b) => a+b, 0);
+                    const pct = Math.round((value/total)*100);
+                    text = `${labels[idx]}\n${pct}%`;
+                } else {
+                    // mostra total no centro quando nada ativo
+                    const total = chart.data.datasets[0].data.reduce((a,b) => a+b, 0);
+                    text = `Total\n${total}`;
+                }
+
+                // configurações de texto
+                ctx.font = '600 14px Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial';
+                ctx.fillStyle = '#111827';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+
+                const x = chart.getDatasetMeta(0).data[0].x;
+                const y = chart.getDatasetMeta(0).data[0].y;
+
+                // desenha linhas separadas (label e valor)
+                const lines = text.split('\n');
+                for (let i = 0; i < lines.length; i++) {
+                    ctx.fillText(lines[i], x, y - 8 + (i * 18));
+                }
+
+                ctx.restore();
+            }
+        };
+
+        const donutChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: data,
+                    backgroundColor: colors,
+                    borderColor: '#ffffff',
+                    borderWidth: 2,
+                    hoverOffset: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '60%',
+                plugins: {
+                    tooltip: {
+                        enabled: true,
+                        callbacks: {
+                            label: function(context) {
+                                const value = context.parsed;
+                                const total = context.dataset.data.reduce((a,b) => a+b, 0);
+                                const pct = ((value/total) * 100).toFixed(1);
+                                return `${context.label}: ${value} (${pct}%)`;
+                            }
+                        }
+                    },
+                    legend: {
+                        display: false,
+                        position: 'bottom',
+                        labels: {
+                            usePointStyle: true,
+                            pointStyle: 'circle'
+                        },
+                        // torna a legenda clicável para alternar visibilidade de fatias
+                        onClick: (e, legendItem, legend) => {
+                            const index = legendItem.index;
+                            const chart = legend.chart;
+                            chart.toggleDataVisibility(index);
+                            chart.update();
+                        }
+                    }
+                },
+                onHover: (e, activeElements) => {
+                    // força redraw para atualizar o texto central via plugin
+                    e.chart.draw();
+                }
+            },
+            plugins: [centerTextPlugin]
+        });
+
+        // Acessibilidade: label e descrição para o canvas
+        const canvas = document.getElementById('donutChart');
+        canvas.setAttribute('role', 'img');
+        canvas.setAttribute('aria-label', 'Gráfico de rosca mostrando percentual de coleta por material');
+    </script>
+</body>
+</html>

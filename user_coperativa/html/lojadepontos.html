@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Loja de Pontos - Mockup</title>
+  <link rel="icon" href="../img/logo 1.png">
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+body {
+    overflow-y: hidden;
+    height: 100vh;
+}
+.device {
+    height: 100vh;
+    max-height: 100vh;
+    overflow-y: hidden;
+    padding-bottom: 80px;
+}
+    /* Pequenos ajustes extras para reproduzir sombras e tamanhos */
+    .device {
+      width: 360px;
+      max-width: 100%;
+      height: 800px;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+      overflow: hidden;
+      position: relative;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      padding-bottom: 80px;
+    }
+    .neon-shadow {
+      box-shadow: 0 6px 18px rgba(16,185,129,0.18);
+    }
+    /* Botão gradient personalizado com as cores solicitadas */
+    .btn-gradient {
+      background: linear-gradient(90deg, #00FE5B 0%, #006F4A 100%);
+      color: white;
+      transition: filter 120ms ease, transform 120ms ease;
+      border: none;
+    }
+    .btn-gradient:hover {
+      filter: brightness(0.95);
+      transform: translateY(-2px);
+    }
+    /* circular floating center button */
+    .floating-center {
+      width: 58px;
+      height: 58px;
+      border-radius: 9999px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      transform: translateY(-16px);
+      box-shadow: 0 10px 24px rgba(16,185,129,0.18);
+    }
+    /* small bottom nav icon sizes */
+    .nav-icon {
+      width: 22px;
+      height: 22px;
+    }
+    /* subtle card inner shadow and equalized card sizing/layout */
+    .card-inner {
+      box-shadow: inset 0 -6px 12px rgba(0,0,0,0.03);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      min-height: 220px; /* same visual height for both coupon cards */
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+    }
+    /* search input fake placeholder color */
+    .search-placeholder { color: #9CA3AF; }
+    /* Footer de Navegação */
+    .footer-nav {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 0;
+      width: 100%;
+      max-width: 360px;
+      background-color: #E3EDE6;
+      display: flex;
+      justify-content: space-around;
+      padding: 0.75rem 0;
+      border-radius: 0.75rem 0.75rem 0 0;
+      box-shadow: 0 -4px 6px -1px rgba(0,0,0,0.15), 0 -2px 4px -2px rgba(0,0,0,0.15), 4px 0 6px -1px rgba(0,0,0,0.15), -4px 0 6px -1px rgba(0,0,0,0.15);
+      z-index: 100;
+      margin: 0 auto;
+    }
+    .nav-item {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 0.5rem;
+      cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.1s;
+    }
+    .nav-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 12px -1px rgba(0,0,0,0.15), 0 4px 6px -2px rgba(0,0,0,0.15);
+    }
+    .nav-item:active {
+      transform: translateY(1px);
+      box-shadow: none;
+    }
+    .nav-icon {
+      width: 30px;
+      height: 30px;
+      color: #1F2937;
+    }
+    .nav-item.active .nav-icon {
+      background-color: #00FE5B;
+      border-radius: 9999px;
+      padding: 0.5rem;
+      width: 46px;
+      height: 46px;
+      position: relative;
+      top: -10px;
+      box-shadow: 0 4px 10px rgba(0,255,153,0.5);
+      color: #1F2937;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .nav-item.active .nav-icon img {
+      width: 22px;
+      height: 22px;
+    }
+    .nav-icon img {
+      width: 2rem;
+      height: 2rem;
+    }
+    @media (max-width: 480px) {
+      .nav-icon img {
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+    }
+    /* Call-to-action image positioned above footer (now icon-sized) */
+    .add-store {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 100px; /* a bit above the fixed footer */
+      width: 48px; /* icon-sized */
+      height: 48px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      pointer-events: auto;
+    }
+    .add-store-img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+      border-radius: 50%; /* circular icon */
+    }
+    .add-store-btn {
+      background: transparent;
+      border: none;
+      padding: 0;
+      display: inline-block;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+    }
+    .add-store-btn:focus {
+      outline: none;
+      box-shadow: 0 0 0 6px rgba(0,254,91,0.12);
+      border-radius: 50%;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+  <div class="device bg-white">
+    <!-- Top area -->
+    <div class="p-4">
+      <!-- Header -->
+      <div class="flex items-center gap-3">
+        <!-- back arrow (navega para home.html) -->
+        <button type="button" aria-label="Voltar" class="p-2 rounded-full hover:bg-gray-100" onclick="window.location.href='home.html'">
+          <!-- simple left arrow -->
+          <svg class="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"  xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path></svg>
+        </button>
+        <!-- Title centered visually -->
+        <div class="flex-1 text-center">
+          <h1 class="text-lg font-semibold text-gray-900">LOJA DE PONTOS</h1>
+        </div>
+        <!-- spacer to keep title centered -->
+        <div style="width:34px;"></div>
+      </div>
+
+      <!-- Search bar -->
+      <div class="mt-4">
+        <div class="flex items-center bg-gradient-to-r from-green-500 to-green-700 p-3 rounded-xl shadow-neon">
+          <div class="flex-1 bg-white rounded-full px-3 py-2 flex items-center gap-2" style="min-height:38px;">
+            <!-- input simulated -->
+            <input class="w-full outline-none text-sm search-placeholder" placeholder=" " value="" />
+            <!-- placeholder text shown visually like the screenshot -->
+            <span class="absolute left-20 opacity-0"></span>
+          </div>
+          <!-- circular search button -->
+          <button class="ml-3 w-10 h-10 rounded-full bg-white flex items-center justify-center">
+            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"  xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15z"></path></svg>
+          </button>
+        </div>
+
+        <!-- Under the gradient box: small input-like card (as in screenshot) -->
+        <div class="mt-3 relative">
+          <div class="absolute left-0 right-0 mx-auto" style="width:100%; max-width:330px;">
+            <!-- a rounded white pill that appears as the inner search (mirrors screenshot layout) -->
+            <div class="mx-auto bg-white rounded-full px-4 py-2 text-left shadow-sm" style="max-width:100%; height:40px;">
+              <p class="text-xs text-gray-400">LIXO COLETADO</p>
+              <p class="text-2xl font-extrabold mt-1">3670<span class="text-lg font-light">kg</span></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main content area (cards) -->
+    <main class="px-4 mt-28">
+      <!-- grid with two product cards as in image -->
+      <div class="grid grid-cols-2 gap-3">
+        <!-- Card 1 -->
+        <div class="bg-white rounded-2xl p-3 card-inner border border-gray-100">
+          <div class="flex flex-col items-center">
+            <!-- product image: using uploaded file path as example image (in case it's available) -->
+            <img src="../img/bobs.png" alt="logo 1" class="w-20 h-20 object-contain mb-2" />
+            <p class="text-xs text-gray-500">Cupom <span class="font-semibold text-gray-700">30% OFF</span></p>
+            <p class="text-sm text-gray-600 mt-1">50 Pontos</p>
+            <button class="mt-3 btn-gradient text-white text-sm font-semibold rounded-md px-4 py-2 w-full">EDITAR</button>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="bg-white rounded-2xl p-3 card-inner border border-gray-100">
+          <div class="flex flex-col items-center">
+            <!-- a simple composed icon to resemble a box of groceries -->
+            <div class="w-20 h-14 mb-2 flex items-center justify-center bg-transparent">
+              <!-- Use same uploaded image as placeholder/logo to respect developer instruction -->
+              <img src="../img/atacadão.png" alt="logo 2" class="w-20 h-20 object-contain" />
+            </div>
+            <p class="text-xs text-gray-500">Cupom <span class="font-semibold text-gray-700">10% OFF</span></p>
+            <p class="text-sm text-gray-600 mt-1">20 Pontos</p>
+            <button class="mt-3 btn-gradient text-white text-sm font-semibold rounded-md px-4 py-2 w-full">EDITAR</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- call-to-action image: centered a bit above the fixed footer -->
+      <div class="add-store">
+        <button type="button" class="add-store-btn" aria-label="Adicionar Loja de Pontos">
+          <img src="../img/Adicionar Loja de Pontos.png" alt="Adicionar Loja de Pontos" class="add-store-img">
+        </button>
+      </div>
+    </main>
+
+    <!-- Footer de Navegação -->
+    <footer class="footer-nav">
+    <!-- Ícone Casa -->
+    <a href="home.html" class="nav-item" aria-label="Página Inicial">
+            <div class="nav-icon">
+                <img src="../img/icon.house.png" alt="Home">
+            </div>
+        </a>
+        <!-- Ícone Sacola/Mochila (Inativo) -->
+    <a href="lojadepontos.html" class="nav-item active" aria-label="Pedidos ou Sacola">
+            <div class="nav-icon">
+                <img src="../img/icon.compras.png" alt="Compras">
+            </div>
+        </a>
+        <!-- Ícone Troféu/Estrela (Inativo) -->
+        <a href="ranking.html" class="nav-item" aria-label="Recompensas ou Perfil">
+            <div class="nav-icon">
+                <img src="../img/icon.ranking.png" alt="Ranking">
+            </div>
+        </a>
+    </footer>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pontos de Alerta</title>
+    <link rel="icon" href="../img/logo 1.png">
+
+    <!-- Incluindo Tailwind CSS para estilização e responsividade --><script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Importa a fonte Inter do Google Fonts para um design mais moderno */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f8fa; /* Fundo suave para destacar os alertas */
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 1rem; /* Padding geral para o corpo */
+        }
+
+        .mobile-screen {
+            width: 100%;
+            max-width: 480px; /* Um pouco mais largo para os elementos maiores */
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08); /* Sombra mais elegante */
+            background-color: #fff;
+            border-radius: 1.5rem; /* Cantos levemente arredondados para a tela geral */
+            overflow: hidden; /* Garante que elementos arredondados internos não "vazem" */
+        }
+        
+    .alert-bubble {
+            /* Aplicando o gradiente solicitado */
+            background: linear-gradient(to right, #00FE5B, #006F4A);
+            color: #fff; /* Texto branco para contraste com o gradiente */
+            font-weight: 600;
+            padding: 1.25rem 2.5rem 1.25rem 3.5rem; /* Padding maior e ajustado para o recorte */
+            border-radius: 9999px; /* Cantos totalmente arredondados */
+            box-shadow: 0 8px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* Sombra mais pronunciada */
+            margin-left: -3rem; /* Margem negativa maior para permitir sobreposição maior das bolinhas */
+            z-index: 10;
+            font-size: 1.1rem; /* Texto maior */
+            line-height: 1.5rem;
+            flex-grow: 1; /* Permite que o balão ocupe o espaço restante */
+            display: flex; /* Para centralizar o texto verticalmente, se necessário */
+            align-items: center;
+        }
+
+        /* Ícone de Alerta: Triângulo Vermelho com Exclamação Branca */
+        .alert-icon-svg path {
+            fill: #dc2626; /* red-600 para o triângulo */
+        }
+        .alert-icon-svg line {
+            stroke: #fff; /* branco para a exclamação */
+            stroke-width: 2.5;
+            stroke-linecap: round;
+        }
+
+        /* Ajustes para o cabeçalho */
+        .header-title {
+            letter-spacing: 0.1em; /* Mais espaçamento entre letras para o título */
+            font-weight: 700;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-screen">
+        <!-- Cabeçalho da Aplicação --><header class="flex items-center p-5 border-b border-gray-100 h-20 sticky top-0 bg-white z-30">
+            <!-- Seta de Voltar (botão que retorna à home) -->
+            <button type="button" onclick="location.href='home.html'" aria-label="Voltar para a página inicial" class="text-2xl mr-4 text-gray-800 focus:outline-none p-1 rounded hover:text-green-600 transition-colors duration-150 ease-in-out focus:ring-2 focus:ring-green-200">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-7 h-7">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+            </button>
+            
+            <!-- Título da Página --><h1 class="text-xl header-title flex-grow text-center pr-10">
+                PONTOS DE ALERTA
+            </h1>
+        </header>
+
+        <!-- Corpo da Página: Lista de Alertas --><main class="p-6 space-y-5">
+            
+            <!-- Item de Alerta 1 --><div class="flex items-center">
+                <!-- Bolinha branca sobrepondo a div verde, contendo o ícone -->
+                <div class="z-20">
+                    <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center drop-shadow-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 alert-icon-svg" viewBox="0 0 24 24" fill="none">
+                            <!-- Triângulo e Exclamação --><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                            <line x1="12" y1="9" x2="12" y2="13" />
+                            <line x1="12" y1="17" x2="12.01" y2="17" />
+                        </svg>
+                    </div>
+                </div>
+                <!-- Balão de Texto com gradiente --><div class="alert-bubble">
+                    Edital aberto até 30/12
+                </div>
+            </div>
+
+            <!-- Item de Alerta 2 --><div class="flex items-center">
+                <!-- Bolinha branca sobrepondo a div verde, contendo o ícone -->
+                <div class="z-20">
+                    <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center drop-shadow-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 alert-icon-svg" viewBox="0 0 24 24" fill="none">
+                            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                            <line x1="12" y1="9" x2="12" y2="13" />
+                            <line x1="12" y1="17" x2="12.01" y2="17" />
+                        </svg>
+                    </div>
+                </div>
+                <!-- Balão de Texto com gradiente --><div class="alert-bubble">
+                    Pontos de coleta com excesso
+                </div>
+            </div>
+
+            <!-- Item de Alerta 3 --><div class="flex items-center">
+                <!-- Bolinha branca sobrepondo a div verde, contendo o ícone -->
+                <div class="z-20">
+                    <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center drop-shadow-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 alert-icon-svg" viewBox="0 0 24 24" fill="none">
+                            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                            <line x1="12" y1="9" x2="12" y2="13" />
+                            <line x1="12" y1="17" x2="12.01" y2="17" />
+                        </svg>
+                    </div>
+                </div>
+                <!-- Balão de Texto com gradiente --><div class="alert-bubble">
+                    2 Relatórios pendentes
+                </div>
+            </div>
+            
+        </main>
+    </div>
+</body>
+</html>

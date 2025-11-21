@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ranking do App - Reprodução Fiel</title>
+    <link rel="icon" href="../img/logo 1.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Cores aproximadas baseadas na análise visual e no tema */
+        :root {
+            --color-primary-green: #4CAF50; /* Verde principal */
+            --color-secondary-green: #66BB6A; /* Verde mais claro (topo) */
+            --color-background-beige: #F5F5DC; /* Bege/Creme do background */
+            --color-text-dark: #333333; /* Texto escuro */
+            --color-podium-gray: #D1D5DB; /* Cinza claro do pódio */
+            --color-podium-dark-gray: #A0A4A8; /* Cinza escuro do pódio */
+            --color-podium-number: #6B7280; /* Cor dos números do pódio */
+            --color-nav-active: #388E3C; /* Verde da navegação ativa */
+            --color-nav-inactive: #A5D6A7; /* Verde da navegação inativa */
+        }
+
+        /* Aplica o background bege ao body e define o viewport para simular um app */
+        body {
+            background-color: var(--color-background-beige);
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Contêiner principal para simular a tela do celular */
+        .app-container {
+            width: 100%;
+            max-width: 400px; /* Largura típica de um celular */
+            background-color: white; /* Conteúdo interno branco */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden; /* Garante que o cabeçalho curvo fique contido */
+            padding-bottom: 80px; /* Espaço para o footer fixo */
+        }
+
+        /* Estilização do cabeçalho com o topo curvo */
+        .header-top {
+            position: relative;
+            background-image: url('../img/ranking.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            overflow: hidden;
+            padding-top: 150px; /* Altura do conteúdo superior reduzida para semicírculo menor */
+            border-bottom-left-radius: 50% 50%; /* Semicírculo completo */
+            border-bottom-right-radius: 50% 50%; /* Semicírculo completo */
+            z-index: 10;
+        }
+        
+        /* Div para o conteúdo da imagem no topo */
+        .header-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            align-items: flex-end;
+            justify-content: flex-start;
+            padding: 1rem 1rem 0;
+            height: 100%;
+        }
+
+        /* Botão de seta para trás */
+        .back-button {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            z-index: 20;
+        }
+
+        /* Estilização do pódio */
+        .podium-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            margin-top: -30px; /* Puxa o pódio para cima, sobrepondo o topo */
+            position: relative;
+            z-index: 20;
+            padding-bottom: 2rem;
+        }
+
+        .podium-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin: 0 0.5rem;
+        }
+
+        .podium-step-base {
+            background-color: var(--color-podium-gray);
+            border: 1px solid var(--color-podium-dark-gray);
+            color: white;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+        }
+
+        /* Tamanhos e posições específicas do pódio */
+        .step-2 { width: 80px; height: 50px; }
+        .step-1 { width: 100px; height: 80px; background-color: white; border-bottom: none; }
+        .step-3 { width: 80px; height: 35px; }
+
+        /* Estilização dos números do pódio */
+        .podium-number {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--color-podium-number);
+            line-height: 1;
+        }
+
+        /* Estilização das avatares no pódio */
+        .podium-avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: 3px solid white; /* Borda branca para destaque */
+            object-fit: cover;
+            position: absolute;
+            transform: translateY(-50%);
+        }
+        .avatar-1 { top: -20px; width: 85px; height: 85px; border-width: 4px; }
+        .avatar-2 { top: 0px; }
+        .avatar-3 { top: 15px; }
+
+        /* Estilização da lista de ranking */
+        .ranking-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            margin: 0.5rem 1rem;
+            border-radius: 12px;
+            background-color: #f7f7f7; /* Um cinza bem claro para o card */
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Footer de Navegação */
+        .footer-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            max-width: 400px; /* Mantém a largura do container */
+            background-color: #E3EDE6; /* Fundo na cor especificada */
+            display: flex;
+            justify-content: space-around;
+            padding: 0.75rem 0;
+            border-radius: 0.75rem 0.75rem 0 0;
+            box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.15), 0 -2px 4px -2px rgba(0, 0, 0, 0.15), 4px 0 6px -1px rgba(0, 0, 0, 0.15), -4px 0 6px -1px rgba(0, 0, 0, 0.15);
+            z-index: 10;
+        }
+
+        .nav-item {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0.5rem;
+            cursor: pointer;
+            transition: transform 0.1s, box-shadow 0.1s;
+        }
+
+        .nav-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 12px -1px rgba(0, 0, 0, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.15);
+        }
+
+        .nav-item:active {
+            transform: translateY(1px);
+            box-shadow: none;
+        }
+
+        .nav-icon {
+            width: 30px;
+            height: 30px;
+            color: #1F2937; /* Cor padrão para ícones inativos */
+        }
+
+        /* Ícone Ativo (Ranking) */
+        .nav-item.active .nav-icon {
+            background-color: #00FE5B;
+            border-radius: 9999px;
+            padding: 0.5rem;
+            width: 46px; /* Ajuste para o padding extra */
+            height: 46px; /* Ajuste para o padding extra */
+            position: relative;
+            top: -10px; /* Deslocamento para cima, como na imagem */
+            box-shadow: 0 4px 10px rgba(0, 255, 153, 0.5);
+            color: #1F2937; /* Cor do ícone dentro do círculo */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .nav-item.active .nav-icon img {
+            width: 22px;
+            height: 22px;
+        }
+        .nav-icon img {
+             width: 2rem;
+             height: 2rem;
+        }
+
+        @media (max-width: 480px) {
+            .nav-icon img {
+                width: 1.5rem;
+                height: 1.5rem;
+            }
+        }
+
+    </style>
+</head>
+<body class="bg-[var(--color-background-beige)]">
+
+    <div class="app-container">
+
+        <div class="header-top">
+            <button type="button" onclick="location.href='home.html'" aria-label="Voltar para a página inicial" class="back-button text-2xl mr-4 text-gray-800 focus:outline-none p-1 rounded hover:text-green-600 transition-colors duration-150 ease-in-out focus:ring-2 focus:ring-green-200">
+                <svg class="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"  xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path></svg>
+            </button>
+            <div class="header-content justify-center items-center h-full">
+            </div>
+        </div>
+        
+        <div class="text-center mt-6 mb-8">
+            <h1 class="text-2xl font-bold text-[var(--color-text-dark)] tracking-wider">RANKING</h1>
+        </div>
+
+        <div class="avatars-container flex justify-center items-center mb-4">
+            <img class="podium-avatar avatar-2 mr-4" src="../img/arthur.png" alt="Arthur Herik">
+            <img class="podium-avatar avatar-1 mr-4" src="../img/nilton.png" alt="Nilton Braz">
+            <img class="podium-avatar avatar-3" src="placeholder-avatar-salatyel.png" alt="Salatyel">
+        </div>
+
+        <div class="podium-container">
+
+             <img src="../img/podio2.svg" alt="">
+        </div>
+        
+        <div class="flex-grow p-4 space-y-3 mb-20"> <div class="ranking-item bg-white shadow-md border-l-4 border-[var(--color-primary-green)]">
+                <img class="w-12 h-12 rounded-full mr-4 object-cover border-2 border-green-500" src="../img/nilton.png" alt="..">
+                <span class="text-lg font-semibold flex-grow text-[var(--color-text-dark)]">Nilton Braz</span>
+                <span class="text-lg font-bold text-[var(--color-text-dark)]">43Kg</span>
+            </div>
+
+            <div class="ranking-item bg-white shadow-sm">
+                <img class="w-12 h-12 rounded-full mr-4 object-cover" src="../img/arthur.png" alt="../">
+                <span class="text-lg font-semibold flex-grow text-[var(--color-text-dark)]">Arthur Herik</span>
+                <span class="text-lg font-normal text-[var(--color-text-dark)]">37Kg</span>
+            </div>
+
+            <div class="ranking-item bg-white shadow-sm">
+                <img class="w-12 h-12 rounded-full mr-4 object-cover" src="../img/salatyel.png" alt="salatyel">
+                <span class="text-lg font-semibold flex-grow text-[var(--color-text-dark)]">Salatyel</span>
+                <span class="text-lg font-normal text-[var(--color-text-dark)]">33Kg</span>
+            </div>
+        </div>
+        
+        <footer class="footer-nav">
+
+            <!-- Ícone Casa (Inativo) -->
+            <a href="home.html" class="nav-item" aria-label="Página Inicial">
+                <div class="nav-icon">
+                    <img src="../img/icon.house.png" alt="Home">
+                </div>
+            </a>
+
+            <!-- Ícone Sacola/Mochila (Inativo) -->
+            <a href="lojadepontos.html" class="nav-item" aria-label="Pedidos ou Sacola">
+                <div class="nav-icon">
+                    <img src="../img/icon.compras.png" alt="Compras">
+                </div>
+            </a>
+
+            <!-- Ícone Troféu/Estrela (Ativo) -->
+            <a href="ranking.html" class="nav-item active" aria-label="Recompensas ou Perfil">
+                <div class="nav-icon">
+                    <img src="../img/icon.ranking.png" alt="Ranking">
+                </div>
+            </a>
+        </footer>
+
+    </div>
+    
+    <script>
+        const replaceImagePlaceholders = (selector, url) => {
+            document.querySelectorAll(selector).forEach(img => {
+                img.src = url;
+                // Apenas para fins de simulação, usei uma imagem genérica
+                // Na implementação real, você usaria seus próprios assets
+            });
+        };
+
+        // Simulação com um placeholder de imagem de perfil genérico
+        const genericAvatarUrl = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iI2QxZDVlNyI+PHBhdGggZD0iTTEyIDRjMi42OSAwIDUuMiAxLjAzIDcuMDcgMi45M0MxOS4wNyA2LjkgMjAgOS4zMSAyMCAxMnMwLS42NS0xLjQyLTEuOTNDMTcuNTIgOC40OCAxNC45MiA2IDEyIDZjLTIuOTEgMC00Ljg0IDEuNjQtNy4xNSAzLjg3QzIuNDggMTIuNjYgMiAxNi4zNSAyIDE5LjJjMCAuMDcuNDUuNjQuNTUuNTUgMS4wMS0uOTkgMi4yMy0xLjM2IDMuMTItMi4yOCAxLjYtMS42MiAzLjU2LTIuNDcgNS40Mi0yLjQ3IDIgMCAzLjU0LjYgNS40MiAyLjQ3LjkzLjkyIDEuNjcgMi41OCAyLjY4IDMuNTdINC45Yy0xLjI0IDAtMi4wNy40Mi0yLjU5Ljc5LS41Mi4zNy0uNzMuNDYtLjc0LjM1QzEgMjEuODIgMS4yNCAyMiAyIDIyYzcuNzQgMCAxMC43OS0zLjcyIDEwLjg0LTcuMTIuMDMtMS42MS0xLjAyLTUuMjUtLjg0LTUuNTJjLjE4LS4yNi43MS0uMzguOTItLjM4cy43NC4xMi45Mi4zOGMwIC4zLS43NCAzLjktLjg3IDUuNTktLjA0IDEuMzkuNTMgMi4xMS44NyAyLjY5LjMzLjU3Ljc5Ljc3IDEuMzIuNzcgMS4xNiAwIDIuMTQtLjQ1IDIuNTgtMS42NS40NC0xLjIgLjM1LTIuNDktLjMyLTMuNDctLjY2LS45OC0xLjcxLTEuNjUtMi44Ny0xLjk1LTIuNjYtLjcxLTYuMDctLjQzLTguMi4wMi0xLjU1LjMzLTIuNjguNTctMi44My41Ny0uMTUgMC0uNjILS4yNC0uODEtLjQxLS4xOC0uMTctLjE3LS42OCAwLS43NS4xNy0uMDcuNzctLjIxIDEuNTItLjIxIDEuOTUgMCA0LjUxLjU2IDUuODUtMS4xOS41NS0uNzEuOTgtMS42MSAxLjE1LTIuNDQuMTctLjg3LjE4LTEuNzQtLjAzLTIuNjcuMjItLjQ5LjY1LS43NC45Mi0uNzQuNTkgMCAuODcuMy45My43LjA3LjQuMjcuOTYuMjkgMS40MS4wNi45LjA1IDEuNzgtLjA1IDIuNTQtLjE1Ljc2LS41MSAxLjQ5LS44NSAyLjA4LS42OSAxLjIzLTEuNyAyLjA4LTIuOTIgMi4wOC0xLjM1IDAtMi40NC0uNjItMi45Ny0xLjU0LS41NC0uOTMtLjY4LTIuMDYtLjM4LTMuNDIuNDItMS45NSAxLjg0LTQuOTUgNC4zNy02LjM0IDMuNDItMS44MSA2LjA2LTEuNjUgOC4wNS0uNTYgMi4zMSAxLjI1IDMuMzkgNC4wNiAzLjM5IDcuMjEgMCAxLjU2LS41IDMuMS0xLjI5IDQuNDMtLjc5IDEuMzQtMS44NCAyLjQ4LTMuMDkgMy4zMy0xLjIzLjg1LTIuNjYgMS40My00LjE2IDEuNzUtMS42NC4zNS0zLjE5LjQ3LTQuNi4zOS0uMTUtLjA4LS4zNS0uMDctLjUyLS4wN2MtMS42NiAwLTMuMjkuNjQtNC41MSAxLjg0LTEuMjMgMS4yLTEuODUgMi44My0xLjg0IDQuNTVsLjA1LjUyYy4xNSAxLjg3IDEuMTQgMy4zIDMuNDYgNC4zMS42LjI2IDEuMTEuNDIgMS41NS40MiAxLjA5IDAgMi40Ny0uNDUgMi45Ny0xLjI5LjQ2LS43OS41Mi0xLjgxLjQyLTIuNTlMNS40IDE2LjJjLS4xMi0uNzQtLjQ1LTEuMDctLjg2LTEuMTYtLjQxLS4wOC0uNzUuMTMtMS4xNi4zNy0xLjA0LjYtMi4xIDEuMjQtMy4xNCAyLjA4bC0uMS4wOGMtLjQ5LjQyLS45My43Mi0xLjI3Ljk0LS4zNS4yMS0uNTguMzMtLjY4LjM5IDAgMC0uNDQtLjI3LS42Ni0uNjdDMi4yOCAxOC4yMiAyIDExLjIgNi42NyA4LjE1QzEwLjY1IDUuNDQgMTUuMzQgNS40IDE5LjM1IDguMTVjMS41NiAxLjAxIDIuMjcgMi40NyAyLjcyIDMuNjIuNDMgMS4xNS41OSAyLjM5LjU5IDMuNjUgMCAuODktLjE1IDEuNzUtLjQ1IDIuNThIMjJWMzYuNTNjMCAuMy0uNDUuMDktLjY3LS4xNmwtMTIuMS0xMWMtLjI3LS4yNS0uNTQtLjQ0LS44NC0uNjEtLjktLjQ3LjkzLS40MiAxLjc0LS43OCAxLjctLjcxIDMuNTYtMS4wOSA1LjE1LTEuMDkgMi43NiAwIDUuNjggMS42NSA3LjM4IDQuMjUgMS43IDEuNSAyLjQ5IDMuNCAyLjQ5IDUuNzUgMCAuNjgtLjEgMS4zNC0uMyAxLjk3LTIuNTcgNC4wMS01LjU1IDYuNTMtOS42OSA2LjUzcy03LjEyLTIuNTItOS42OS02LjUzYy0uMi0uNjMtLjMtMS4yOS0uMy0xLjk3IDAtMi4zNS43OS00LjI1IDIuNDktNS43NSAxLjctMi42IDQuNi00LjI1IDcuMzgtNC4yNSAzLjM5IDAgNi4wMyAxLjQxIDcuOTggMy4wOS4xMy4xLjI4LjE4LjQ3LjE3Ljk2LS40IDItLjY1IDIuNjItLjg2LjM1LS4xMS43LS4yNyAxLjA0LS4yNy4zNC0uMTkuNjUtLjI4Ljg3LS4yNi4yMy4wMi41MS4yMS43MS40Mi4wOC4wOC4xMS4zLjA5LjQ3LS4wMi4xOC0uMTIuMzUtLjI3LjQ5LS4yOS4zLS43MS40OC0xLjI2LjQ4LTEuMjQgMC0yLjM5LS44MS0zLjA4LTIuMDYtLjY5LTEuMjUtLjc3LTIuODQtLjIzLTQuMzkuMzYtMS4wMi45NC0xLjk3IDEuNjctMi43NC43My0uNzggMS41Ny0xLjM2IDIuMzktMS43NS4xLS4wNC4xNy0uMS4xNy0uMTlsLjE5LS40Yy4wOC0uMTYuMTQtLjMyLjE5LS41QzE2Ljg2IDMuNjEgMTQuNTEgMiAxMiAyIDkuMjEgMiA3LjA5IDMuMDQgNS44MyA1Ljc2Yy0uNDUuOTgtLjU4IDIuMDktLjM4IDMuMjguMiAxLjE5LjgxIDIuMjMgMS44NSAzLjAyIDEuNzcgMS4zMSAzLjk4IDEuOTcgNi4zIDIuMDkgMi40Mi4xMiA0LjU5LS43MiA2LjM0LTIuNDEuNjktLjY1IDEuMjQtMS40MSAxLjYxLTIuMjMuMzctLjgxLjU2LTEuNzIuNTYtMi43MSAwLTEuNTMtLjUzLTMuMDQtMS42MS00LjI5LTEuMDktMS4yNS0yLjYxLTIuMTItNC4zNS0yLjMyLTIuMDQtLjIzLTQuMjQuMTgtNS45NSAxLjMtMi4zMSAxLjU0LTMuNzUgMy43OC00LjQ4IDYuMzItLjc0IDIuNTQtLjE5IDUuMTEgMS43MyA3LjI3IDEuOTIgMi4xNiA1LjA1IDMuMzkgNy40MiAzLjM5IDIuNDUgMCA0LjUzLS41IDUuODUtMS41NCAxLjMxLTEuMDMgMS45Ny0yLjQxIDEuOTYtMy45NC0uMDItMS42Mi0uNi0zLjE5LTEuNjYtNC40Ni0xLjA2LTEuMjctMi41Ny0yLjE4LTQuMjktMi40Ni0yLjI3LS4zNy00LjUzLjMzLTYuNDMgMS4zOS0xLjc3Ljk3LTIuOTYgMi4zOC0zLjU4IDQuMDgtLjYyIDEuNy0uMyAzLjU5Ljc5IDUuMjQgMS4wOSAxLjY1IDIuODMgMi41NiA0LjczIDIuNThjLjM3IDAgLjY1LS4xMS43Mi0uMzhsLjYtMi4xNS4yLTEuODQtLjE0LTEuNTctLjE3LTEuNDQtLjI3LS45Mi0uNTItLjc1LS44NC0uNjEtMS4xMy0uMjgtMS40MS0uMDMtMS42NS4wNy0xLjg0LjMtLjY3LjI1LS45NS42LTEuMDkuODUtLjEuMjktLjA5LjYxLjA5LjE4LjA0LjQ5LS4wNS43Ny0uMTcuNzctLjIyLjE4LS40OC4zMS0uODkuMzV6TTE5IDdWMTdIMTRWMTFIMTJWMTdINlY3SDEwVjEwSDE0VjcuMDZMMjIgMTJ2LTguMjNsLTEuMi40NmMtLjM1LjEzLS42OS4xOS0xLjA1LjE5LS43OCAwLTEuNTQtLjI5LTIuMTMtLjg2LTYuNzEtNi41Mi0xNC40OC0xLjA0LTkuMTctMy4xOC00Ljc3IDEuMTEtMy4xIDEyLjg0IDQuNiAyMC42NyAxLjU1IDMgMi41OCA1LjAzIDIuOTggNy42Ni4zOSA3LjM5LTMuNTggMTIuODMtMTIgMTIuODNTMi40MyAxOS40OSAyIDEyLjU0Yy4wMy0uNTQuMDctMS4wNy4xMi0xLjU5IDAtLjA5LjAyLS4yLjA2LS4zMS4wMy0uMTEuMDctLjIxLjExLS4zMi4wNS0uMS4wOS0uMjEuMTYtLjMxLjA3LS4xLjE0LS4xOC4yMi0uMjguMTEtLjA4LjIzLS4xNi4zNi0uMjIuMTItLjA3LjI2LS4xMi40LS4xNi4xNC0uMDQuMjgtLjA3LjQzLS4wNy41MSAwIDEuMDguMTMgMS42My4zNyAxLjAuNDkgMS45MyAxLjI3IDIuNDEgMi4zNC4xMS4yNC4xOC41LjIgLjc2LjA2LjU4LS4wNyAxLjE5LS4zNyAxLjc1LS4zIDAtLjYtLjM2LS45Ni0uNWMtLjI4LS4xMS0uNjUtLjEzLTEuMDQtLjA0LTIuMDkuNTEtMy40NSAxLjc5LTQuMDIgMy41LS43MSAyLjA5LS4xMiA0LjE4IDEuNjcgNS42NyAxLjg1IDEuMjggNC4wNyAxLjkyIDYuMjQgMS44OCAyLjU2LS4wNCA0LjctMS4wNiA2LjE1LTMuMDcuNDItLjU2LjY2LTEuMjQuNzEtMS45Ni4wNi0uNzgtLjA1LTEuNTctLjM1LTIuMzcgMS41OS0zLjA5YzEuNDEtMS4zNSAzLjI1LTIuMDYgNS4xOC0yLjA3IDIuNDggMCA0LjY0IDEuMDQgNi4yNiAyLjkyIDEuNjIgMS44OCAyLjU2IDQuMzkgMi41NiA3LjE2IDAgMi44OCAxIDUuNDMgMi43MiA3LjY3IDEuNzMgMi4yMyA0LjA0IDMuNDggNi42IDMuNDhIMThWMTRaTTE1IDRjMS42NiAwIDMgMS4zNCAzIDNzLTEuMzQgMy0zIDMtMy0xLjM0LTMtMyAxLjM0LTMgMy0zWiI+PC9wYXRoPjwvc3ZnPg==";
+        
+        replaceImagePlaceholders('img[alt$="Nilton Braz"]', genericAvatarUrl);
+        replaceImagePlaceholders('img[alt$="Arthur Herik"]', genericAvatarUrl);
+        replaceImagePlaceholders('img[alt$="Salatyel"]', genericAvatarUrl);
+        replaceImagePlaceholders('.header-content', genericAvatarUrl); // O ideal seria ter uma imagem diferente para o topo
+    </script>
+</body>
+</html>

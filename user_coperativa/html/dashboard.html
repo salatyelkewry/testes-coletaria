@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Coleta</title>
+    <link rel="icon" href="../img/logo 1.png">
+
+    <!-- Carregando Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Carregando Chart.js para Gráficos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+    <style>
+        /* Configurações customizadas do Tailwind e estilo global */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+        
+        :root {
+            --neon-green: #00ff41;
+            --dark-bg: #ffffff;
+            --card-bg: #f9f9f9;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--dark-bg);
+        }
+
+        .neon-shadow {
+            box-shadow: 0 0 10px rgba(0, 255, 65, 0.4), 0 0 5px rgba(0, 255, 65, 0.2);
+        }
+
+        .neon-border {
+            border: 1px solid var(--neon-green);
+        }
+
+        .gradient-banner {
+            background: linear-gradient(90deg, #00ff41, #00b32e);
+            transition: all 0.3s ease;
+        }
+
+        .gradient-banner:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px rgba(0, 255, 65, 0.6), 0 6px 6px rgba(0, 255, 65, 0.3);
+        }
+
+        /* Estilo do Gráfico de Rosca (Reciclados) */
+        .doughnut-chart-container {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: conic-gradient(
+                var(--neon-green) 0%,
+                var(--neon-green) 72%,
+                #ffffff 72%,
+                #ffffff 100%
+            );
+            position: relative;
+        }
+
+        .doughnut-inner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 85%;
+            height: 85%;
+            background-color: var(--card-bg);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+    </style>
+</head>
+<body class="text-black p-4">
+
+    <!-- Botão de Voltar -->
+    <div class="max-w-md mx-auto mb-4">
+        <button onclick="window.location.href='home.html'" class="flex items-center space-x-2 text-black hover:text-gray-700">
+            <img src="../img/seta.png" alt="Voltar" class="w-6 h-6">
+            
+        </button>
+    </div>
+
+    <!-- Container Principal do Dashboard -->
+    <div class="max-w-md mx-auto space-y-4">
+        
+        <!-- LINHA 1: Cards de Métricas (Lixo Coletado e Usuários Ativos) -->
+        <div class="flex space-x-4">
+            <!-- Card Lixo Coletado -->
+            <div class="flex-1 bg-gradient-to-r from-green-500 to-green-700 p-3 rounded-xl shadow-neon text-center">
+                <p class="text-xs text-white">LIXO COLETADO</p>
+                <p class="text-2xl text-white mt-1">3670<span class="text-lg font-light">kg</span></p>
+            </div>
+            <!-- Card Usuários Ativos -->
+            <div class="flex-1 bg-gradient-to-r from-green-500 to-green-700 p-3 rounded-xl shadow-neon text-center">
+                <p class="text-xs text-white font-semibold">USUÁRIOS ATIVOS</p>
+                <p class="text-2xl text-white mt-1">72</p>
+            </div>
+        </div>
+
+        <!-- LINHA 2: Coletas de Hoje (Gráfico de Barras) -->
+        <div class="bg-[--card-bg] p-4 rounded-xl neon-shadow neon-border">
+            <h2 class="text-lg font-semibold mb-3">Coletas de Hoje</h2>
+            <div class="h-40">
+                <canvas id="barChart"></canvas>
+            </div>
+        </div>
+
+        <!-- LINHA 3: Banner PERCENTUAL DE COLETA -->
+        <a href="dashpercentual.html" class="gradient-banner text-white p-3 rounded-xl text-center shadow-neon block">
+            <h3 class="text-xl font-extrabold tracking-wider">PERCENTUAL DE COLETA</h3>
+        </a>
+
+        <!-- LINHA 4: Reciclados esse mês (Gráfico de Rosca) -->
+        <div class="bg-[--card-bg] p-4 rounded-xl neon-shadow neon-border">
+            <h2 class="text-lg font-semibold mb-6">Reciclados esse mês</h2>
+            <div class="flex justify-center">
+                <div class="doughnut-chart-container">
+                    <div class="doughnut-inner">
+                        <p class="text-3xl font-bold">72%</p>
+                        <p class="text-xs">de resíduos<br>reciclados</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LINHA 5: Banner TOTAL DE CO2 EVITADO -->
+        <div class="gradient-banner text-white p-3 rounded-xl text-center shadow-neon">
+            <p class="text-xs font-semibold">TOTAL DE CO2 EVITADO</p>
+            <p class="text-2xl font-extrabold tracking-wider">5 243 112,10<span class="text-lg font-light">kg</span></p>
+        </div>
+
+        <!-- LINHA 6: Maiores Geradores (Lista) -->
+        <div class="bg-[--card-bg] p-4 rounded-xl neon-shadow neon-border">
+            <h2 class="text-lg font-semibold mb-4">MAIORES GERADORES</h2>
+            <ul class="space-y-3">
+                <!-- Item 1 -->
+                <li class="flex justify-between items-center text-sm font-medium">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-3 h-3 rounded-full bg-gray-400"></div>
+                        <span>ATACADÃO DO VALE</span>
+                    </div>
+                    <span class="font-bold text-[--neon-green]">5430kg</span>
+                </li>
+                <!-- Item 2 -->
+                <li class="flex justify-between items-center text-sm font-medium">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-3 h-3 rounded-full bg-gray-400"></div>
+                        <span>ALOHA PALACE</span>
+                    </div>
+                    <span class="font-bold text-[--neon-green]">4300kg</span>
+                </li>
+                <!-- Item 3 -->
+                <li class="flex justify-between items-center text-sm font-medium">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-3 h-3 rounded-full bg-gray-400"></div>
+                        <span>ESSENZA</span>
+                    </div>
+                    <span class="font-bold text-[--neon-green]">3800kg</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- LINHA 7: Desempenho Mensal (Gráfico de Área) -->
+        <div class="bg-[--card-bg] p-4 rounded-xl neon-shadow neon-border mb-8">
+            <h2 class="text-lg font-semibold mb-3">DESEMPENHO MENSAL</h2>
+            <div class="h-40">
+                <canvas id="areaChart"></canvas>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Script para inicializar os gráficos Chart.js -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // ----------------------------------------------------
+            // 1. Gráfico de Barras - Coletas de Hoje
+            // ----------------------------------------------------
+            const barCtx = document.getElementById('barChart').getContext('2d');
+            new Chart(barCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['6:00', '8:00', '10:00', '12:00', '14:00', '16:00', '18:00'],
+                    datasets: [{
+                        label: 'Coletas (kg)',
+                        data: [50, 75, 60, 90, 45, 70, 95], // Dados simulados
+                        backgroundColor: 'rgba(0, 255, 65, 0.8)', // Cor do neon
+                        borderRadius: 8,
+                        barPercentage: 0.7,
+                        categoryPercentage: 0.8,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { enabled: false }
+                    },
+                    scales: {
+                        y: {
+                            display: false, // Esconder eixo Y
+                            beginAtZero: true
+                        },
+                        x: {
+                            grid: { display: false, drawBorder: false }, // Esconder linhas e borda
+                        ticks: { color: 'black' }
+                        }
+                    }
+                }
+            });
+
+            // ----------------------------------------------------
+            // 2. Gráfico de Área - Desempenho Mensal
+            // ----------------------------------------------------
+            const areaCtx = document.getElementById('areaChart').getContext('2d');
+            const months = ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'];
+            
+            // Simular gradientes de área para as duas camadas
+            const gradient1 = areaCtx.createLinearGradient(0, 0, 0, 200);
+            gradient1.addColorStop(0, 'rgba(0, 255, 65, 0.7)');
+            gradient1.addColorStop(1, 'rgba(0, 255, 65, 0.1)');
+
+            const gradient2 = areaCtx.createLinearGradient(0, 0, 0, 200);
+            gradient2.addColorStop(0, 'rgba(0, 179, 46, 0.7)');
+            gradient2.addColorStop(1, 'rgba(0, 179, 46, 0.1)');
+
+
+            new Chart(areaCtx, {
+                type: 'line',
+                data: {
+                    labels: months,
+                    datasets: [
+                        {
+                            label: 'Volume Total',
+                            data: [120, 190, 150, 220, 180, 250, 200, 280, 230, 300, 260, 330],
+                            backgroundColor: gradient1,
+                            borderColor: 'rgba(0, 255, 65, 1)',
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0.4,
+                            pointRadius: 0
+                        },
+                        {
+                            label: 'Meta',
+                            data: [80, 110, 90, 140, 110, 170, 130, 200, 150, 220, 180, 250].map((d, i) => d * 0.7), // Segunda camada um pouco menor
+                            backgroundColor: gradient2,
+                            borderColor: 'rgba(0, 179, 46, 1)',
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0.4,
+                            pointRadius: 0
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { enabled: false }
+                    },
+                    scales: {
+                        y: {
+                            display: false, // Esconder eixo Y
+                            beginAtZero: true
+                        },
+                        x: {
+                            grid: { display: false, drawBorder: false }, // Esconder linhas e borda
+                            ticks: { color: 'white', maxRotation: 0 }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

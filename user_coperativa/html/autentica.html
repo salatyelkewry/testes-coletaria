@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autenticação - ColetarAI</title>
+    <link rel="icon" href="../img/logo 1.png">
+    <!-- Carrega o Tailwind CSS para estilização -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <style>
+        /* Define a fonte Inter como padrão */
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Fundo com imagem de login para consistência */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        /* Estilo para a área de autenticação (card branco) */
+        .auth-card {
+            background-color: rgba(255, 255, 255, 0.95); 
+            width: 100%; 
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 2rem;
+            text-align: center; /* Centraliza o texto no corpo do card */
+        }
+
+        /* Estilo do gradiente primário (Verde Vibrante) - Fiel à referência */
+        .btn-gradient {
+            background: linear-gradient(180deg, #38e35c 0%, #17a94d 100%);
+            transition: all 0.2s ease-in-out;
+        }
+        .btn-gradient:hover {
+            box-shadow: 0 4px 15px rgba(23, 169, 77, 0.4); 
+            opacity: 0.95;
+        }
+        
+        /* Estilo para o botão de SMS que é puramente verde */
+        .btn-solid-green {
+            background-color: #38e35c;
+            transition: background-color 0.2s;
+        }
+        .btn-solid-green:hover {
+             background-color: #17a94d;
+        }
+
+        /* Campo de Input de Código - Caixa Branca */
+        .code-input {
+            width: 3rem; 
+            height: 4rem;
+            text-align: center;
+            font-size: 1.5rem;
+            border: 0;
+            border-bottom: 2px solid #ccc;
+            background-color: #f0f0f0;
+            border-radius: 0.5rem;
+            outline: none;
+            transition: border-bottom-color 0.2s;
+        }
+
+        .code-input:focus {
+            border-bottom-color: #17a94d;
+        }
+
+        /* Ajuste para telas maiores (desktop/tablet) */
+        @media (min-width: 640px) {
+            .auth-card {
+                max-width: 420px;
+                min-height: auto;
+                height: auto;
+                border-radius: 0.75rem; 
+                box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            }
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-0 sm:p-4">
+
+    <!-- Container Principal de Autenticação (responsivo) -->
+    <div class="auth-card">
+        
+        <!-- Logo e Nome da Empresa - CENTRALIZADO -->
+        <div class="flex items-center justify-center mb-10">
+            <!-- TAG IMG da logo com ícone e texto, mantendo o visual da ColetarAI -->
+            <img 
+                src="img/logo png.png" 
+                alt="Ícone da Logo ColetarAI" 
+                class="w-10 h-10 mr-2 object-contain"
+                onerror="this.onerror=null; this.src='https://placehold.co/40x40/17a94d/ffffff?text=AI';"
+            >
+            <span class="text-3xl font-bold text-gray-800 tracking-tighter">ColetarAI</span>
+        </div>
+
+        <!-- CONTEÚDO DINÂMICO -->
+        <div id="authContent" class="flex flex-col items-center">
+            
+            <!-- ETAPA 1: AUTENTICAÇÃO POR TELEFONE -->
+            <div id="step1" class="w-full px-4">
+                <h1 class="text-3xl font-extrabold text-gray-900 mb-8 text-center">Autenticação</h1>
+                
+                <p class="mb-8 text-lg font-medium text-gray-700">Preencha seu contato telefônico</p>
+                
+                <div class="flex justify-center items-center mb-12">
+                    <!-- Código do País Fixo +55 (Brasil) -->
+                    <span class="text-xl font-semibold mr-2 text-gray-700">+55</span>
+                    
+                    <!-- Campo de Telefone com Máscara Simples -->
+                    <input 
+                        type="tel" 
+                        id="phoneInput" 
+                        maxlength="14" 
+                        placeholder="(XX) XXXX-XXXX" 
+                        class="text-center text-xl font-medium text-gray-700 border-b-2 border-gray-300 focus:border-green-500 outline-none p-1 bg-transparent"
+                        required
+                    >
+                </div>
+                
+                <!-- Botão CONTINUAR (Verde Sólido, conforme referência) -->
+                <button onclick="goToStep(2)" class="btn-solid-green w-full py-3 text-lg font-bold text-white rounded-lg shadow-lg">
+                    CONTINUAR
+                </button>
+            </div>
+
+            <!-- ETAPA 2: VERIFICAÇÃO DE CÓDIGO SMS (Inicialmente Oculta) -->
+            <div id="step2" class="w-full px-4 hidden text-center">
+                <h1 class="text-3xl font-extrabold text-gray-900 mb-4">Login</h1>
+                
+                <p class="mb-8 text-base text-gray-700 font-semibold">
+                    Te enviaremos um código
+                    <br>
+                    Confira o número do código e digite abaixo. O número deve ter seis dígitos.
+                </p>
+                
+                <!-- Botão Receber por SMS (Verde Sólido) -->
+                <button onclick="sendCode()" class="btn-solid-green w-full max-w-[200px] mx-auto py-3 text-sm font-bold text-white rounded-full shadow-lg mb-10">
+                    Receber por SMS
+                </button>
+
+                <!-- Inputs para o Código de 6 dígitos -->
+                <div class="flex justify-center space-x-2 mb-4">
+                    <input type="text" id="code1" class="code-input" maxlength="1" inputmode="numeric">
+                    <input type="text" id="code2" class="code-input" maxlength="1" inputmode="numeric">
+                    <input type="text" id="code3" class="code-input" maxlength="1" inputmode="numeric">
+                    <input type="text" id="code4" class="code-input" maxlength="1" inputmode="numeric">
+                    <input type="text" id="code5" class="code-input" maxlength="1" inputmode="numeric">
+                    <input type="text" id="code6" class="code-input" maxlength="1" inputmode="numeric">
+                </div>
+                
+                <!-- Descrição e Contador -->
+                <div class="flex justify-between w-full max-w-xs mx-auto text-sm text-gray-500 mb-10">
+                    <span>CÓDIGO</span>
+                    <span id="codeCharCount">0 / 6 caracteres</span>
+                </div>
+                
+                <p id="resendMessage" class="text-sm text-gray-500 mb-6">
+                    Para reenviar o código, aguarde <span id="countdown">30</span>s
+                </p>
+                
+                <!-- Botão PRÓXIMO (Gradiente) -->
+                <button onclick="verifyCode()" class="btn-gradient w-full py-3 text-lg font-bold text-white rounded-lg shadow-lg mb-4">
+                    PRÓXIMO
+                </button>
+
+                <!-- Botão VOLTAR (Link) -->
+                <a href="proj_coletarai.html" class="text-sm font-medium text-gray-500 hover:text-gray-700">VOLTAR</a>
+            </div>
+
+            <!-- Mensagem de Status (não visível inicialmente) -->
+            <div id="statusMessage" class="mt-8 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg hidden w-full" role="alert">
+                <!-- Mensagens de erro/sucesso aparecerão aqui -->
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const step1 = document.getElementById('step1');
+        const step2 = document.getElementById('step2');
+        const statusMessage = document.getElementById('statusMessage');
+        const phoneInput = document.getElementById('phoneInput');
+        const codeInputs = [
+            document.getElementById('code1'),
+            document.getElementById('code2'),
+            document.getElementById('code3'),
+            document.getElementById('code4'),
+            document.getElementById('code5'),
+            document.getElementById('code6')
+        ];
+        const codeCharCount = document.getElementById('codeCharCount');
+        const countdownElement = document.getElementById('countdown');
+        let countdownTimer;
+
+        // --- Funções de Navegação e Estado ---
+
+        function goToStep(step) {
+            statusMessage.classList.add('hidden');
+            if (step === 2) {
+                // Simulação: Valida o telefone e envia o código
+                if (!phoneInput.value.match(/^\(\d{2}\)\s\d{4,5}-\d{4}$/)) {
+                    showMessage('Formato de telefone inválido. Use o formato (XX) XXXX-XXXX.', 'error');
+                    return;
+                }
+                
+                // Transiciona para a Etapa 2
+                step1.classList.add('hidden');
+                step2.classList.remove('hidden');
+                
+                // Inicia o contador e simula o envio do código
+                startCountdown(30);
+                showMessage(`Código de verificação enviado para ${phoneInput.value}.`, 'success');
+                
+            } else if (step === 1) {
+                // Volta para a Etapa 1
+                step2.classList.add('hidden');
+                step1.classList.remove('hidden');
+                
+                // Limpa o código e o timer
+                codeInputs.forEach(input => input.value = '');
+                updateCharCount();
+                stopCountdown();
+            }
+        }
+        
+        function sendCode() {
+             // Simula o reenvio do código (apenas reinicia o contador e a mensagem)
+             stopCountdown();
+             startCountdown(30);
+             showMessage('Novo código de verificação enviado.', 'success');
+        }
+
+        function verifyCode() {
+            const code = codeInputs.map(input => input.value).join('');
+            
+            if (code.length !== 6) {
+                showMessage('O código deve ter 6 dígitos.', 'error');
+                return;
+            }
+
+            // Simulação de verificação bem-sucedida
+            showMessage('Código verificado com sucesso! Redirecionando para o aplicativo...', 'success');
+
+            // Aqui seria a lógica de navegação final
+            setTimeout(() => {
+                // window.location.href = 'app_dashboard.html'; // Redireciona para o app
+            }, 1500);
+        }
+
+        function showMessage(message, type) {
+            statusMessage.classList.remove('hidden', 'bg-red-100', 'border-red-400', 'text-red-700', 'bg-green-100', 'border-green-400', 'text-green-700');
+            if (type === 'error') {
+                statusMessage.classList.add('bg-red-100', 'border-red-400', 'text-red-700');
+            } else if (type === 'success') {
+                statusMessage.classList.add('bg-green-100', 'border-green-400', 'text-green-700');
+            }
+            statusMessage.innerHTML = message;
+        }
+
+        // --- Funções Auxiliares (Máscara e Contador) ---
+
+        function applyPhoneMask(e) {
+            let value = e.target.value.replace(/\D/g, ""); // Remove tudo que não é dígito
+            let maskedValue = '';
+
+            // (XX) XXXX-XXXX ou (XX) XXXXX-XXXX
+            if (value.length > 0) {
+                maskedValue += '(' + value.substring(0, 2);
+            }
+            if (value.length > 2) {
+                maskedValue += ') ' + value.substring(2, 6);
+            }
+            if (value.length > 6) {
+                maskedValue += '-' + value.substring(6, 10);
+            }
+            if (value.length > 10) { // Para 5º dígito (celular)
+                maskedValue = maskedValue.replace('-', '');
+                maskedValue = maskedValue.substring(0, 9) + '-' + value.substring(6, 11);
+            }
+            
+            e.target.value = maskedValue;
+        }
+        
+        function updateCharCount() {
+            const count = codeInputs.filter(input => input.value.length === 1).length;
+            codeCharCount.textContent = `${count} / 6 caracteres`;
+        }
+
+        function handleCodeInput(e) {
+            const currentInput = e.target;
+            const value = currentInput.value;
+            
+            // Permite apenas dígitos
+            currentInput.value = value.replace(/\D/g, '').substring(0, 1);
+            
+            updateCharCount();
+
+            // Mover foco para o próximo campo
+            if (currentInput.value.length === 1) {
+                const currentIndex = codeInputs.indexOf(currentInput);
+                if (currentIndex < codeInputs.length - 1) {
+                    codeInputs[currentIndex + 1].focus();
+                } else if (currentIndex === codeInputs.length - 1) {
+                    // Se for o último, tenta verificar o código
+                    verifyCode();
+                }
+            }
+        }
+        
+        function startCountdown(seconds) {
+            let remaining = seconds;
+            countdownElement.textContent = remaining;
+
+            const resendLink = document.createElement('a');
+            resendLink.href = '#';
+            resendLink.className = 'font-medium text-green-600 hover:text-green-700';
+            resendLink.textContent = 'Reenviar Código';
+            resendLink.onclick = (e) => {
+                e.preventDefault();
+                sendCode();
+            };
+
+            const updateResendMessage = () => {
+                const messageContainer = document.getElementById('resendMessage');
+                if (remaining > 0) {
+                    messageContainer.innerHTML = `Para reenviar o código, aguarde <span id="countdown">${remaining}</span>s`;
+                } else {
+                    messageContainer.innerHTML = 'Não recebeu? ';
+                    messageContainer.appendChild(resendLink);
+                }
+            };
+
+            countdownTimer = setInterval(() => {
+                remaining--;
+                updateResendMessage();
+                if (remaining <= 0) {
+                    clearInterval(countdownTimer);
+                }
+            }, 1000);
+            
+            updateResendMessage(); // Chama imediatamente para configurar o estado inicial
+        }
+        
+        function stopCountdown() {
+            if (countdownTimer) {
+                clearInterval(countdownTimer);
+                countdownTimer = null;
+            }
+        }
+
+        // --- Inicialização ---
+
+        phoneInput.addEventListener('input', applyPhoneMask);
+        codeInputs.forEach(input => {
+            input.addEventListener('input', handleCodeInput);
+        });
+
+        // Configuração inicial para a primeira tela
+        // (A Etapa 1 já está visível por padrão no HTML)
+    </script>
+</body>
+</html>

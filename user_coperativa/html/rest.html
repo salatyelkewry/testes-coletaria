@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova Senha - ColetarAI</title>
+    <!-- Carrega o Tailwind CSS para estilização -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <style>
+        /* Define a fonte Inter como padrão */
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Fundo branco conforme a imagem de referência */
+            background-color: #ffffff; 
+            color: #1f2937; /* Texto cinza escuro */
+        }
+        
+        /* Estilo para a área principal (centralizada) */
+        .password-container {
+            width: 100%; 
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        /* Estilo do input com fundo claro/cinza e bordas arredondadas (conforme a imagem) */
+        .input-new-password {
+            background-color: #f3f4f6; /* cinza muito claro */
+            border-radius: 0.5rem; /* arredondado */
+            padding: 0.75rem 1rem;
+            width: 100%;
+            border: 1px solid #e5e7eb;
+            outline: none;
+            color: #374151;
+            font-weight: 500;
+        }
+        
+        .input-new-password::placeholder {
+            color: #9ca3af; /* Cor do placeholder */
+            font-weight: 600;
+            letter-spacing: 0.05em; /* Simula o espaçamento de letras maiúsculas */
+        }
+        
+        /* Estilo para o botão PROXIMO (cinza claro com texto verde) */
+        .btn-proximo {
+            background-color: #e5e7eb; /* cinza claro */
+            transition: background-color 0.2s;
+            color: #17a94d; /* Cor do texto (verde primário) */
+            font-weight: 800;
+            letter-spacing: 0.05em;
+        }
+        .btn-proximo:hover {
+            background-color: #d1d5db; /* Escurece um pouco no hover */
+        }
+        
+        /* Ajuste para telas maiores (desktop/tablet) */
+        @media (min-width: 640px) {
+            .password-container {
+                max-width: 420px; 
+                margin: 0 auto;
+                min-height: auto;
+                height: 100vh;
+            }
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center">
+
+    <!-- Container Principal da Nova Senha -->
+    <div class="password-container">
+        
+        <!-- Título principal (Logo e nome ColetarAI foram removidos, conforme a imagem de referência) -->
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">Login</h1>
+        <p class="text-gray-600 mb-12">Entre com sua senha</p>
+
+        <!-- Formulário de Nova Senha -->
+        <form id="newPasswordForm" onsubmit="handleNewPassword(event)" class="w-full">
+            
+            <!-- Campo Nova Senha -->
+            <div class="mb-4">
+                <input 
+                    type="password" 
+                    id="new_password" 
+                    placeholder="NOVA SENHA" 
+                    class="input-new-password" 
+                    required
+                >
+            </div>
+
+            <!-- Campo Confirme a Nova Senha -->
+            <div class="mb-4">
+                <input 
+                    type="password" 
+                    id="confirm_new_password" 
+                    placeholder="CONFIRME A NOVA SENHA" 
+                    class="input-new-password" 
+                    required
+                >
+            </div>
+
+            <!-- Regra de senha -->
+            <div class="flex items-center text-sm text-gray-500 mb-10 text-left">
+                <!-- Ponto/ícone simples, conforme a imagem -->
+                <span class="text-green-500 mr-2">•</span>
+                A senha deve conter no mínimo 6 caracteres
+            </div>
+            
+            <!-- Botão Próximo -->
+            <button type="submit" class="btn-proximo w-full py-3 text-lg rounded-full shadow-md">
+                PRÓXIMO
+            </button>
+        </form>
+        
+        <!-- Mensagem de Status -->
+        <div id="statusMessage" class="mt-6 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg hidden w-full" role="alert">
+            <!-- Mensagens de erro/sucesso aparecerão aqui -->
+        </div>
+
+    </div>
+
+    <script>
+    // Função para simular a definição da nova senha
+    function handleNewPassword(event) {
+        event.preventDefault(); 
+        const newPassword = document.getElementById('new_password').value;
+        const confirmPassword = document.getElementById('confirm_new_password').value;
+        const statusMessage = document.getElementById('statusMessage');
+
+        // Limpa e esconde mensagens anteriores
+        statusMessage.classList.add('hidden');
+        statusMessage.innerHTML = '';
+        statusMessage.classList.remove('bg-green-100', 'border-green-400', 'text-green-700', 'bg-red-100', 'border-red-400', 'text-red-700');
+
+
+        // 1. Validação de senhas vazias
+        if (newPassword === '' || confirmPassword === '') {
+            statusMessage.classList.remove('hidden');
+            statusMessage.classList.add('bg-red-100', 'border-red-400', 'text-red-700');
+            statusMessage.innerHTML = 'Preencha os dois campos de senha.';
+            return;
+        }
+
+        // 2. Validação de comprimento mínimo (6 caracteres)
+        if (newPassword.length < 6) {
+            statusMessage.classList.remove('hidden');
+            statusMessage.classList.add('bg-red-100', 'border-red-400', 'text-red-700');
+            statusMessage.innerHTML = 'A senha deve ter no mínimo 6 caracteres.';
+            return;
+        }
+
+        // 3. Validação de senhas coincidentes
+        if (newPassword !== confirmPassword) {
+            statusMessage.classList.remove('hidden');
+            statusMessage.classList.add('bg-red-100', 'border-red-400', 'text-red-700');
+            statusMessage.innerHTML = 'As senhas não coincidem. Por favor, verifique.';
+            return;
+        }
+
+        // Simulação de sucesso
+        statusMessage.classList.remove('hidden');
+        statusMessage.classList.add('bg-green-100', 'border-green-400', 'text-green-700');
+        statusMessage.innerHTML = 'Senha alterada com sucesso! Redirecionando para o login.';
+
+        // Simula o redirecionamento (voltando para a tela de login)
+        setTimeout(() => {
+             // Redireciona para index.html após o sucesso
+             window.location.href = 'index.html';
+        }, 3000);
+    }
+</script>
+</body>
+</html>
